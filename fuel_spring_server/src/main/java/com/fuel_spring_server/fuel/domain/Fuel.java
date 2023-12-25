@@ -16,7 +16,7 @@ public class Fuel {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
-        private Type type;
+        private String type;
         @Column(nullable = false)
  //       @NotEmpty(message = "price cannot be empty")
         private double price;

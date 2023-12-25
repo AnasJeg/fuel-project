@@ -2,6 +2,7 @@ package com.fuel_spring_server.fuel.web;
 
 
 import com.fuel_spring_server.fuel.domain.Fuel;
+import com.fuel_spring_server.fuel.dto.PieChartDTO;
 import com.fuel_spring_server.fuel.services.FuelService;
 import com.fuel_spring_server.fuel.services.impl.FuelServiceImpl;
 import jakarta.validation.Valid;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/fuel")
@@ -34,6 +37,11 @@ public class FuelController {
         return new ResponseEntity<>(fuels, HttpStatus.OK);
     }
 
+    @GetMapping("/pie/{id}")
+    public ResponseEntity<List<PieChartDTO>> getPieCharts(@PathVariable Long id) {
+        List<PieChartDTO> pieChartData = fuelService.pieChartDTOS(id);
+        return new ResponseEntity<>(pieChartData, HttpStatus.OK);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<Fuel> getFuelById(@PathVariable Long id) {
         Fuel fuel = fuelService.getTransactionById(id);

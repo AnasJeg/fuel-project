@@ -1,6 +1,7 @@
 package com.fuel_spring_server.fuel.services.impl;
 
 import com.fuel_spring_server.fuel.domain.Fuel;
+import com.fuel_spring_server.fuel.dto.PieChartDTO;
 import com.fuel_spring_server.fuel.repository.FuelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +13,11 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -46,11 +50,11 @@ public class FuelServiceImpl {
 
     public Fuel save(Fuel fuel) {
         Map<String, Double> fuelPrices = fetchFuelPrices();
-        double litres = fuelPrices.get(fuel.getType().name()) / fuel.getTotale();
+        double litres = fuelPrices.get(fuel.getType()) / fuel.getTotale();
         fuel.setLitre(litres);
         fuel.setDate(new Date());
         fuel.setType(fuel.getType());
-        fuel.setPrice(fuelPrices.get(fuel.getType().name()) );
+        fuel.setPrice(fuelPrices.get(fuel.getType()) );
         return fuelRepository.save(fuel);
     }
 
@@ -77,4 +81,24 @@ public class FuelServiceImpl {
         }
         return false;
     }
+/*
+    public List<PieChartDTO> pieChartDTOS(Long id){
+        return fuelRepository.getChart(id);
+    }
+
+ */
+
+       public List<PieChartDTO> pieChartDTOS(Long id) {
+        List<ArrayList> result = fuelRepository.getChart(id);
+
+        return result.stream()
+                .map(row -> {
+                    String type = (String) row.get(0);
+                    Double litres = (Double) row.get(1);
+                    Double totale = (Double) row.get(2);
+                    return new PieChartDTO(type, litres, totale);
+                })
+                .collect(Collectors.toList());
+    }
+
 }
