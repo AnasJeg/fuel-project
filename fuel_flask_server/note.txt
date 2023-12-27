@@ -1,0 +1,5 @@
+openssl genpkey -algorithm RSA -out private.pem
+
+public KEY
+
+openssl rsa -pubout -in private.pem -out public.pem
