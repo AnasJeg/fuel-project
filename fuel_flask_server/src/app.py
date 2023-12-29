@@ -117,13 +117,12 @@ def login():
         print(f'Error executing login query: {e}')
         return jsonify({'message': f'Error occurred while processing the request: {e}'}), 500
 
-signup_query = "INSERT INTO user (city, email, nom, password, prenom) VALUES (%s, %s, %s, %s, %s)"
+signup_query = "INSERT INTO user (email, nom, password, prenom) VALUES (%s, %s, %s, %s, %s)"
 
 @app.route('/register', methods=['POST'])
 def signup():
     try:
         data = request.get_json()
-        city = data.get('city')
         email = data.get('email')
         nom = data.get('nom')
         password = data.get('password')
@@ -131,7 +130,7 @@ def signup():
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-        db_cursor.execute(signup_query, (city, email, nom, hashed_password, prenom))
+        db_cursor.execute(signup_query, (email, nom, hashed_password, prenom))
         conn.commit()
 
         
