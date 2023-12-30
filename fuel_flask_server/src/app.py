@@ -12,7 +12,7 @@ import py_eureka_client.eureka_client as eureka_client
 
 eureka_server_url = "http://localhost:8010/eureka"
 
-
+ 
 private_key_path = os.path.join(os.path.dirname(__file__), 'private.pem')
 private_key = serialization.load_pem_private_key(open(private_key_path, 'rb').read(), password=None)
 
