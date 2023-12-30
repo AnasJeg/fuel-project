@@ -28,9 +28,7 @@ public class User {
     @Column(nullable = false)
     @NotEmpty(message = "nom cannot be empty")
     private String nom;
-    @Column(nullable = false)
-    @NotEmpty(message = "city cannot be empty")
-    private String city;
+
 
     @Column(unique = true, nullable = false)
     @NotEmpty(message = "email cannot be empty")
