@@ -6,6 +6,7 @@ import com.fuel_spring_server.fuel.dto.LineChartDTO;
 import com.fuel_spring_server.fuel.dto.PieChartDTO;
 import com.fuel_spring_server.fuel.services.FuelService;
 import com.fuel_spring_server.fuel.services.impl.FuelServiceImpl;
+import com.fuel_spring_server.user.domain.User;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.data.domain.Page;
@@ -55,6 +56,15 @@ public class FuelController {
         Fuel fuel = fuelService.getTransactionById(id);
         if (fuel != null) {
             return new ResponseEntity<>(fuel, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<Page<Fuel>> getUserById(@PathVariable Long id, Pageable pageable) {
+        Page<Fuel> fuelTransactions = fuelService.getTransactionByUserId(id, pageable);
+        if (fuelTransactions != null) {
+            return new ResponseEntity<>(fuelTransactions, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

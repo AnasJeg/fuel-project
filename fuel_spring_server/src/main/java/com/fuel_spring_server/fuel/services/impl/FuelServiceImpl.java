@@ -4,6 +4,8 @@ import com.fuel_spring_server.fuel.domain.Fuel;
 import com.fuel_spring_server.fuel.dto.LineChartDTO;
 import com.fuel_spring_server.fuel.dto.PieChartDTO;
 import com.fuel_spring_server.fuel.repository.FuelRepository;
+import com.fuel_spring_server.user.domain.User;
+import com.fuel_spring_server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FuelServiceImpl {
     private final FuelRepository fuelRepository;
+
+    private final UserRepository userRepository;
 
     private static final String flaskUrl = "http://localhost:8888/FUEL-FLASK/prices";
 
@@ -121,6 +125,16 @@ public class FuelServiceImpl {
                     return new LineChartDTO(type, litres, totale,date);
                 })
                 .collect(Collectors.toList());
+    }
+
+    public Page<Fuel> getTransactionByUserId(Long id, Pageable pageable) {
+        if (userRepository.existsById(id)) {
+            log.info("User Transaction with id {}", id);
+            return fuelRepository.getFuelByUserId(id, pageable);
+        } else {
+            log.warn("User Transaction with id {} not found", id);
+            return null;
+        }
     }
 
 }
