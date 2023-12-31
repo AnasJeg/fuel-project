@@ -2,7 +2,6 @@ package com.fuel_spring_server.fuel.repository;
 
 
 import com.fuel_spring_server.fuel.domain.Fuel;
-import com.fuel_spring_server.user.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

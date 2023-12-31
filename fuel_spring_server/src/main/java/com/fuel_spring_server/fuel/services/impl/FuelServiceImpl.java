@@ -4,7 +4,6 @@ import com.fuel_spring_server.fuel.domain.Fuel;
 import com.fuel_spring_server.fuel.dto.LineChartDTO;
 import com.fuel_spring_server.fuel.dto.PieChartDTO;
 import com.fuel_spring_server.fuel.repository.FuelRepository;
-import com.fuel_spring_server.user.domain.User;
 import com.fuel_spring_server.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -94,12 +93,6 @@ public class FuelServiceImpl {
         }
         return false;
     }
-/*
-    public List<PieChartDTO> pieChartDTOS(Long id){
-        return fuelRepository.getChart(id);
-    }
-
- */
 
        public List<PieChartDTO> pieChartDTOS(Long id) {
         List<ArrayList> result = fuelRepository.getChart(id);

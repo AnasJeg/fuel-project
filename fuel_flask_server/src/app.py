@@ -15,6 +15,7 @@ import py_eureka_client.eureka_client as eureka_client
 app = Flask(__name__)
 
 
+
 db_config = {
     "host": os.environ.get("DATABASE_HOST", "localhost"),
     "port": os.environ.get("DATABASE_PORT", "3306"),
@@ -79,6 +80,8 @@ def gen_refresh_token():
 
 
 
+INVALID_CREDENTIALS_MSG = 'Invalid credentials'
+
 @app.route('/login', methods=['POST'])
 def login():
     try:
@@ -98,17 +101,19 @@ def login():
                     refresh_token = gen_refresh_token()
                     print(f'Refresh Token for {email}: {refresh_token}')
 
+                    # Use the constant for the error message
                     return jsonify({'access_token': access_token, 'refresh_token': refresh_token})
                 else:
-                    return jsonify({'message': 'Invalid credentials'}), 401
+                    return jsonify({'message': INVALID_CREDENTIALS_MSG}), 401
             else:
-                return jsonify({'message': 'Invalid credentials'}), 401
+                return jsonify({'message': INVALID_CREDENTIALS_MSG}), 401
         else:
-            return jsonify({'message': 'Invalid credentials'}), 401
+            return jsonify({'message': INVALID_CREDENTIALS_MSG}), 401
     except Exception as e:
         print(f'Error executing login query: {e}')
         db_pool.rollback()
         return jsonify({'message': f'Error occurred while processing the request: {e}'}), 500
+
 
 
 
