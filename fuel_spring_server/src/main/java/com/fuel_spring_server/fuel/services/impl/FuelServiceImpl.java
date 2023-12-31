@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class FuelServiceImpl {
+
+
     private final FuelRepository fuelRepository;
 
     private static final String flaskUrl = "http://localhost:8888/FUEL-FLASK/prices";
@@ -81,16 +83,9 @@ public class FuelServiceImpl {
         }
         return false;
     }
-/*
-    public List<PieChartDTO> pieChartDTOS(Long id){
-        return fuelRepository.getChart(id);
-    }
-
- */
 
        public List<PieChartDTO> pieChartDTOS(Long id) {
         List<ArrayList> result = fuelRepository.getChart(id);
-
         return result.stream()
                 .map(row -> {
                     String type = (String) row.get(0);
@@ -99,6 +94,15 @@ public class FuelServiceImpl {
                     return new PieChartDTO(type, litres, totale);
                 })
                 .collect(Collectors.toList());
+    }
+
+    public List<Fuel> getFuelByUserId(Long id) {
+        if(fuelRepository.getFuelByUserId(id)==null){
+            log.info("no transaction for this user id = {}", id);
+            return null;
+        }else{
+            return fuelRepository.getFuelByUserId(id);
+        }
     }
 
 }

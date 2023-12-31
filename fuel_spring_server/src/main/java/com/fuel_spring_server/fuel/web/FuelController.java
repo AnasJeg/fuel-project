@@ -20,6 +20,7 @@ import java.util.List;
 @CrossOrigin("*")
 public class FuelController {
 
+
     private final FuelServiceImpl fuelService;
 
     public FuelController(FuelServiceImpl service){
@@ -61,4 +62,11 @@ public class FuelController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
+    @GetMapping("/user/id/{id}")
+    public List<Fuel> getFuelByUserId(@PathVariable Long id) {
+        return fuelService.getFuelByUserId(id);
+    }
+
 }
