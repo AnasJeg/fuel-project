@@ -2,9 +2,11 @@ package com.fuel_spring_server.fuel.web;
 
 
 import com.fuel_spring_server.fuel.domain.Fuel;
+import com.fuel_spring_server.fuel.dto.LineChartDTO;
 import com.fuel_spring_server.fuel.dto.PieChartDTO;
 import com.fuel_spring_server.fuel.services.FuelService;
 import com.fuel_spring_server.fuel.services.impl.FuelServiceImpl;
+import com.fuel_spring_server.user.domain.User;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.data.domain.Page;
@@ -19,8 +21,6 @@ import java.util.List;
 @RequestMapping("/api/fuel")
 @CrossOrigin("*")
 public class FuelController {
-
-
 
     private final FuelServiceImpl fuelService;
 
@@ -45,11 +45,26 @@ public class FuelController {
         List<PieChartDTO> pieChartData = fuelService.pieChartDTOS(id);
         return new ResponseEntity<>(pieChartData, HttpStatus.OK);
     }
+
+    @GetMapping("/line/{id}")
+    public ResponseEntity<List<LineChartDTO>> getLineCharts(@PathVariable Long id) {
+        List<LineChartDTO> lineChartData = fuelService.lineChartDTOS(id);
+        return new ResponseEntity<>(lineChartData, HttpStatus.OK);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<Fuel> getFuelById(@PathVariable Long id) {
         Fuel fuel = fuelService.getTransactionById(id);
         if (fuel != null) {
             return new ResponseEntity<>(fuel, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<Page<Fuel>> getUserById(@PathVariable Long id, Pageable pageable) {
+        Page<Fuel> fuelTransactions = fuelService.getTransactionByUserId(id, pageable);
+        if (fuelTransactions != null) {
+            return new ResponseEntity<>(fuelTransactions, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
