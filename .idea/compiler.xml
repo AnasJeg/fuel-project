@@ -11,11 +11,6 @@
         <module name="fuel_spring_server" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="fuel_eureka_server" target="17" />
-      <module name="fuel_gateway" target="17" />
-      <module name="fuel_spring_server" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
