@@ -1,6 +1,7 @@
 package com.fuel_spring_server.fuel.services.impl;
 
 import com.fuel_spring_server.fuel.domain.Fuel;
+import com.fuel_spring_server.fuel.dto.LineChartDTO;
 import com.fuel_spring_server.fuel.dto.PieChartDTO;
 import com.fuel_spring_server.fuel.repository.FuelRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,13 +51,21 @@ public class FuelServiceImpl {
 
     public Fuel save(Fuel fuel) {
         Map<String, Double> fuelPrices = fetchFuelPrices();
-        double litres = fuelPrices.get(fuel.getType()) / fuel.getTotale();
-        fuel.setLitre(litres);
-        fuel.setDate(new Date());
-        fuel.setType(fuel.getType());
-        fuel.setPrice(fuelPrices.get(fuel.getType()) );
-        return fuelRepository.save(fuel);
+        Double fuelPrice = fuelPrices.get(fuel.getType());
+
+        if (fuelPrice != null && fuel.getTotale() != 0) {
+            double litres = fuel.getTotale() / fuelPrice;
+            fuel.setLitre(litres);
+            fuel.setDate(new Date());
+            fuel.setType(fuel.getType());
+            fuel.setPrice(fuelPrice);
+            return fuelRepository.save(fuel);
+        } else {
+            log.warn("Failed to calculate litres fuel price {}",fuelPrice);
+            throw new RuntimeException("Failed to calculate litres. Invalid fuel price or totale.");
+        }
     }
+
 
     public Page<Fuel> getAll(Pageable pageable) {
         log.info("Get all fuel page {} size {}", pageable.getPageNumber(), pageable.getPageSize());
@@ -97,6 +106,19 @@ public class FuelServiceImpl {
                     Double litres = (Double) row.get(1);
                     Double totale = (Double) row.get(2);
                     return new PieChartDTO(type, litres, totale);
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<LineChartDTO> lineChartDTOS(Long id) {
+        List<ArrayList> result = fuelRepository.getLineChart(id);
+        return result.stream()
+                .map(row -> {
+                    String type = (String) row.get(0);
+                    Double litres = (Double) row.get(1);
+                    Double totale = (Double) row.get(2);
+                    Date date = (Date) row.get(3);
+                    return new LineChartDTO(type, litres, totale,date);
                 })
                 .collect(Collectors.toList());
     }

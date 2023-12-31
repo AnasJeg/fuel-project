@@ -2,6 +2,7 @@ package com.fuel_spring_server.fuel.web;
 
 
 import com.fuel_spring_server.fuel.domain.Fuel;
+import com.fuel_spring_server.fuel.dto.LineChartDTO;
 import com.fuel_spring_server.fuel.dto.PieChartDTO;
 import com.fuel_spring_server.fuel.services.FuelService;
 import com.fuel_spring_server.fuel.services.impl.FuelServiceImpl;
@@ -42,6 +43,12 @@ public class FuelController {
     public ResponseEntity<List<PieChartDTO>> getPieCharts(@PathVariable Long id) {
         List<PieChartDTO> pieChartData = fuelService.pieChartDTOS(id);
         return new ResponseEntity<>(pieChartData, HttpStatus.OK);
+    }
+
+    @GetMapping("/line/{id}")
+    public ResponseEntity<List<LineChartDTO>> getLineCharts(@PathVariable Long id) {
+        List<LineChartDTO> lineChartData = fuelService.lineChartDTOS(id);
+        return new ResponseEntity<>(lineChartData, HttpStatus.OK);
     }
     @GetMapping("/{id}")
     public ResponseEntity<Fuel> getFuelById(@PathVariable Long id) {
