@@ -21,6 +21,7 @@ import java.util.List;
 public class FuelController {
 
 
+
     private final FuelServiceImpl fuelService;
 
     public FuelController(FuelServiceImpl service){
@@ -54,14 +55,18 @@ public class FuelController {
         }
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteFuel(@PathParam(value = "id") Long id) {
-        if (fuelService.deleteTransaction(id)) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @DeleteMapping("/delete/{id}")
+    public Boolean deleteTransaction(@PathVariable Long id) {
+        return fuelService.deleteTransaction(id);
     }
+
+//    public ResponseEntity<Void> deleteFuel(@PathParam(value = "id") Long id) {
+//        if (fuelService.deleteTransaction(id)) {
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
 
     @GetMapping("/user/id/{id}")
