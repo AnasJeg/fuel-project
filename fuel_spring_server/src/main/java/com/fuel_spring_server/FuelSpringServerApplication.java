@@ -16,11 +16,5 @@ public class FuelSpringServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(FuelSpringServerApplication.class, args);
     }
-  /*
-    @LoadBalanced
-    @Bean
-    RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-   */
+
 }

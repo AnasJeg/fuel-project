@@ -1,0 +1,7 @@
+organization=anasjeg
+projectKey=anasjeg_fuel-flask
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.51767
+dashboardUrl=https://sonarcloud.io/dashboard?id=anasjeg_fuel-flask
+ceTaskId=AYzBuqHMz00S9SXW7Imx
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AYzBuqHMz00S9SXW7Imx
