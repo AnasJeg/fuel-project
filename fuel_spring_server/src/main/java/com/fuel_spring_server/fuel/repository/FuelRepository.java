@@ -15,4 +15,12 @@ public interface FuelRepository extends JpaRepository<Fuel,Long> {
     List<ArrayList> getChart(Long id);
 
     List<Fuel> getFuelByUserId(Long id);
+
+    @Query(nativeQuery = true, value = "SELECT f.type, SUM(f.litre) AS litres FROM fuel f WHERE f.user_id = ?1 GROUP BY f.type;")
+    List<Object[]> getSumOfLitres(Long id);
+
+    @Query(nativeQuery = true, value = "SELECT f.type, SUM(f.totale) AS totale, SUM(f.litre) AS litre FROM fuel f WHERE f.user_id = ?1 GROUP BY f.type;")
+    List<Object[]> getTotalAmount(Long id);
+
+
 }

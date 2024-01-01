@@ -15,6 +15,12 @@
     <description>fuel_spring_server</description>
     <properties>
         <java.version>17</java.version>
+        <jacoco.version>0.8.8</jacoco.version>
+        <sonar.jacoco.reportPaths>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPaths>
+            <sonar.organization>badr-ait-hammou</sonar.organization>
+            <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectKey>fuel</sonar.projectKey>
+        <sonar.login>1d3263d6ee9817c542a1b5fda54727da6a00ea67</sonar.login>
         <spring-cloud.version>2023.0.0</spring-cloud.version>
     </properties>
     <dependencies>
@@ -75,6 +81,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.6</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -101,6 +112,26 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

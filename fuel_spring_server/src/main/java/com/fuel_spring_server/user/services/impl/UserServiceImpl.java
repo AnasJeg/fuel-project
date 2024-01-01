@@ -32,17 +32,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll(pageable);
     }
 
-    @Override
-    public User updateUser(User user) {
-        log.info("Updating user with id {}: {}", user.getId(), user.getNom());
 
-        Optional<User> check = userRepository.findById(user.getId());
-        if (check.isPresent()) {
-            return userRepository.saveAndFlush(user);
-        } else {
-            log.warn("User with id {} not found", user.getId());
-            return null;
-        }
+
+    public void updateUser(Long id,User userInfo) {
+        User user=userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("app not found with id " + id));
+        user.setPrenom(userInfo.getPrenom());
+        user.setNom(userInfo.getNom());
+        userRepository.save(user);
     }
 
     @Override

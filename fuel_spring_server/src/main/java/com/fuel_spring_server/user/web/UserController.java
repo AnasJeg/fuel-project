@@ -2,6 +2,7 @@ package com.fuel_spring_server.user.web;
 
 import com.fuel_spring_server.user.domain.User;
 import com.fuel_spring_server.user.services.UserService;
+import com.fuel_spring_server.user.services.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+
+    @Autowired
+   private  UserServiceImpl userServiceImple;
+
     @PostMapping("/")
     public ResponseEntity<User> saveUser(@RequestBody @Valid User user) {
         User savedUser = userService.saveUser(user);
@@ -31,15 +37,19 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<User> updateUser(@RequestBody @Valid User user) {
-        if (user != null) {
-            User updatedUser = userService.updateUser(user);
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PutMapping("/update/{id}")
+    public void updateUser(@PathVariable Long id,@RequestBody User userInfo) {
+        userServiceImple.updateUser(id, userInfo);
     }
+
+//    public ResponseEntity<User> updateUser(@RequestBody @Valid User user) {
+//        if (user != null) {
+//            User updatedUser = userService.updateUser(user);
+//            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {

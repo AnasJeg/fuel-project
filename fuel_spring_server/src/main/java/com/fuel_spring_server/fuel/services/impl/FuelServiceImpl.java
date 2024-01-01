@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class FuelServiceImpl {
+
 
 
     private final FuelRepository fuelRepository;
@@ -52,7 +54,7 @@ public class FuelServiceImpl {
 
     public Fuel save(Fuel fuel) {
         Map<String, Double> fuelPrices = fetchFuelPrices();
-        double litres = fuelPrices.get(fuel.getType()) / fuel.getTotale();
+        double litres = fuel.getTotale() / fuelPrices.get(fuel.getType());
         fuel.setLitre(litres);
         fuel.setDate(new Date());
         fuel.setType(fuel.getType());
@@ -104,5 +106,14 @@ public class FuelServiceImpl {
             return fuelRepository.getFuelByUserId(id);
         }
     }
+
+    public List<Object[]> getSumOfLitres(Long id) {
+        return fuelRepository.getSumOfLitres(id);
+    }
+
+    public List<Object[]> getTotalAmount(Long id) {
+        return fuelRepository.getTotalAmount(id);
+    }
+
 
 }
