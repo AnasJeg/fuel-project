@@ -157,5 +157,25 @@ def fuel_prices():
         return jsonify({"error": f"Failed to retrieve data. Status code: {response.status_code}"})
 
 
+@app.route('/user/<int:user_id>', methods=['GET'])
+def get_user_by_id(user_id):
+    try:
+        user_info = execute_query("SELECT id, email, nom, prenom FROM user WHERE id = %s", (user_id,), fetchone=True)
+
+        if user_info:
+            user_data = {
+                'id': user_info[0],
+                'email': user_info[1],
+                'nom': user_info[2],
+                'prenom': user_info[3]
+            }
+            return jsonify(user_data)
+        else:
+            return jsonify({'message': 'User not found'}), 404
+    except Exception as e:
+        print(f'Error getting user by ID: {e}')
+        return jsonify({'message': f'Error occurred while processing the request: {e}'}), 500
+
+
 if __name__ == '__main__':
     app.run(host="localhost", port=rest_port, debug=True)
