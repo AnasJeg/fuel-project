@@ -43,11 +43,7 @@ public class FuelController {
         return new ResponseEntity<>(pieChartData, HttpStatus.OK);
     }
 
-//    @GetMapping("/line/{id}")
-//    public ResponseEntity<List<LineChartDTO>> getLineCharts(@PathVariable Long id) {
-//        List<LineChartDTO> lineChartData = fuelService.lineChartDTOS(id);
-//        return new ResponseEntity<>(lineChartData, HttpStatus.OK);
-//    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Fuel> getFuelById(@PathVariable Long id) {
         Fuel fuel = fuelService.getTransactionById(id);
@@ -57,33 +53,15 @@ public class FuelController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-//    @GetMapping("/user/{id}")
-//    public ResponseEntity<Page<Fuel>> getUserById(@PathVariable Long id, Pageable pageable) {
-//        Page<Fuel> fuelTransactions = fuelService.getTransactionByUserId(id, pageable);
-//        if (fuelTransactions != null) {
-//            return new ResponseEntity<>(fuelTransactions, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+
 
     @DeleteMapping("/delete/{id}")
     public Boolean deleteTransaction(@PathVariable Long id) {
         return fuelService.deleteTransaction(id);
     }
 
-//    public ResponseEntity<Void> deleteFuel(@PathParam(value = "id") Long id) {
-//        if (fuelService.deleteTransaction(id)) {
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
 
-    @GetMapping("/litres/{id}")
-    public List<Object[]> getSumOfLitres(@PathVariable Long id) {
-        return fuelService.getSumOfLitres(id);
-    }
+
 
     @GetMapping("/amount/{id}")
     public List<Object[]> getTotalAmount(@PathVariable Long id) {

@@ -107,9 +107,6 @@ public class FuelServiceImpl {
         }
     }
 
-    public List<Object[]> getSumOfLitres(Long id) {
-        return fuelRepository.getSumOfLitres(id);
-    }
 
     public List<Object[]> getTotalAmount(Long id) {
         return fuelRepository.getTotalAmount(id);
