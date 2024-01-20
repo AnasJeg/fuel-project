@@ -16,13 +16,24 @@ app = Flask(__name__)
 
 
 
+# db_config = {
+#     "host": os.environ.get("DATABASE_HOST", "localhost"),
+#     "port": os.environ.get("DATABASE_PORT", "3306"),
+#     "database": os.environ.get("DATABASE_NAME", "fuel"),
+#     "user": os.environ.get("DATABASE_USER", "root"),
+#     "password": os.environ.get("DATABASE_PASS", ""),
+# }
+
 db_config = {
-    "host": os.environ.get("DATABASE_HOST", "localhost"),
+    "host": os.environ.get("DATABASE_HOST", "mysql-container1"),
     "port": os.environ.get("DATABASE_PORT", "3306"),
     "database": os.environ.get("DATABASE_NAME", "fuel"),
     "user": os.environ.get("DATABASE_USER", "root"),
-    "password": os.environ.get("DATABASE_PASS", ""),
+    "password": os.environ.get("DATABASE_PASS", "root"),
 }
+
+
+
 db_pool = pooling.MySQLConnectionPool(pool_name="mypool", pool_size=5, **db_config)
 
 
@@ -30,7 +41,7 @@ private_key_path = os.path.join(os.path.dirname(__file__), 'private.pem')
 private_key = serialization.load_pem_private_key(open(private_key_path, 'rb').read(), password=None)
 
 
-eureka_server_url = "http://localhost:8010/eureka"
+eureka_server_url = "http://eureka:8010/eureka"
 rest_port = 8070
 eureka_client.init(
     eureka_server=eureka_server_url,
@@ -163,4 +174,4 @@ def fuel_prices():
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=rest_port, debug=True)
+    app.run(host="0.0.0.0", port=rest_port, debug=True)

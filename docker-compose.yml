@@ -1,0 +1,101 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container1
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    networks:
+      - microservices-network
+
+  eureka:
+    image: hashicorp/eureka:latest
+    build:
+      context: ./fuel_eureka_server
+    container_name: eureka
+    restart: always
+    ports:
+      - "8010:8010"
+    networks:
+      - microservices-network
+
+  gateway-service:
+    build:
+      context: ./fuel_gateway
+    ports:
+      - "8888:8888"
+    depends_on:
+      - mysql
+      - eureka
+    networks:
+      - microservices-network
+    environment:
+      SPRING_CLOUD_EUREKA_HOST: eureka
+      SPRING_CLOUD_EUREKA_PORT: 8010
+      SPRING_CLOUD_EUREKA_ENABLED: 'true'
+
+  fuel-spring:
+    build:
+      context: ./fuel_spring_server
+    ports:
+      - "8090:8090"
+    depends_on:
+      - mysql
+      - eureka
+      - gateway-service
+    networks:
+      - microservices-network
+    environment:
+      SPRING_CLOUD_EUREKA_HOST: eureka
+      SPRING_CLOUD_EUREKA_PORT: 8010
+      SPRING_CLOUD_EUREKA_ENABLED: 'true'
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fuel?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=root --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 2s
+      retries: 100
+
+  fuel-flask:
+    build:
+      context: ./fuel_flask_server
+    ports:
+      - "8070:8070"
+    depends_on:
+      - mysql
+      - eureka
+      - gateway-service
+    networks:
+      - microservices-network
+    environment:
+      SPRING_CLOUD_EUREKA_HOST: eureka
+      SPRING_CLOUD_EUREKA_PORT: 8010
+      SPRING_CLOUD_EUREKA_ENABLED: 'true'
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fuel?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=root --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 2s
+      retries: 100
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8081:80"
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge

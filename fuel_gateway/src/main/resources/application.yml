@@ -7,24 +7,12 @@ spring:
   cloud:
     discovery:
       enabled: true
-#      gateway:
-#        routes:
-#          - id: fuel-spring
-#            uri: lb://FUEL-SPRING
-#            predicates:
-#              - Path=/fuel-spring/**
-
-#          - id: fuel-flask
-#            uri: lb://FUEL-FLASK
-#            predicates:
-#              - Path=/fuel-flask/**
-
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8010/eureka
+      defaultZone: http://eureka:8010/eureka
 management:
   endpoints:
     web:

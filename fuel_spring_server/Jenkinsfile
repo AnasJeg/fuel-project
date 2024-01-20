@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+           checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/AnasJeg/fuel-project']])
+                sh 'mvn clean install -DskipTests'
+            }
+        }
+
+        stage('Deploy Docker') {
+            steps {
+                script {
+                    sh 'docker build -t fuel_spring/fuel_spring .'
+                }
+            }
+        }
+    }
+}
