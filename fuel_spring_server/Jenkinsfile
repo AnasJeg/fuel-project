@@ -1,18 +1,51 @@
 pipeline {
     agent any
+    tools {
+        maven 'maven'
+    }
 
     stages {
-        stage('Build') {
+        stage('Git Clone') {
             steps {
-           checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/AnasJeg/fuel-project']])
-                sh 'mvn clean install -DskipTests'
+                script {
+                    checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'https://github.com/AnasJeg/fuel-project.git']]])
+                }
             }
         }
 
-        stage('Deploy Docker') {
+        stage('Build Authentification') {
             steps {
                 script {
-                    sh 'docker build -t fuel_spring/fuel_spring .'
+                    dir('fuel_flask_server') {
+                        bat 'mvn clean install -DskipTests'
+                    }
+                }
+            }
+        }
+
+        stage('Build Spring') {
+            steps {
+                script {
+                    dir('fuel_spring_server') {
+                        bat 'mvn clean install -DskipTests'
+                    }
+                }
+            }
+        }
+
+        stage('Analyze the microservice with SonarQube') {
+            steps {
+                script {
+                dir('fuel_spring_server') {
+                        bat 'mvn sonar:sonar'
+                    }
+                }
+            }
+        }
+        stage('Docker Run') {
+            steps {
+                script {
+                    bat 'docker-compose up -d'
                 }
             }
         }
